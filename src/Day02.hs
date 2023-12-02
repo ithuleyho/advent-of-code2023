@@ -3,6 +3,10 @@ module Day02 (solve) where
 import Data.Char
 import Debug.Trace
 
+trim :: String -> String
+trim = f . f
+   where f = reverse . dropWhile isSpace
+
 gameNumber line = read gamenum :: Integer
   where
     dropped = drop 5 line
@@ -31,11 +35,11 @@ parseSets prev xs = parseSets num rest
     rest = drop (length digits) xs
     num = read digits :: Integer
 
-parse line = if parseSets 0 sets then gameNumber line else 0
+parse1 line = if parseSets 0 sets then gameNumber line else 0
   where
     sets = drop 1 $ dropWhile (\x -> x /= ':') line
 
-part1 input = sum . map parse $ lines input
+part1 input = sum . map parse1 $ lines input
 
 
 
@@ -48,7 +52,25 @@ split sep str = foldr op [[]] str
               | x == sep = []:y:ys
               | otherwise = (x:y):ys
 
-part2 :: String -> [String]
-part2 input = split ';' input
+flatten :: [[a]] -> [a]         
+flatten xs = (\z n -> foldr (\x y -> foldr z y x) n xs) (:) []
+
+parseSet ([numstring, c]:xs) = case c of
+                            "red" -> [max n redMin, greenMin, blueMin]
+                            "green" -> [redMin, max n greenMin, blueMin]
+                            "blue" -> [redMin, greenMin, max n blueMin]
+                            _      -> [0, 0, 0]
+    where [redMin, greenMin, blueMin] = parseSet xs
+          n = read numstring :: Integer
+parseSet [] = [0, 0, 0]
+
+parse2 line = r * g * b
+    where setstr = drop 1 $ dropWhile (\x -> x /= ':') line
+          splitcolours line = map trim $ split ',' line
+          separate line = map (split ' ') (splitcolours line)
+          sets = map separate $ split ';' setstr
+          [r, g, b] = parseSet $ flatten sets          
+  
+part2 input = sum $ map parse2 $ lines input
 
 solve = part2

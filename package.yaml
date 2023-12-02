@@ -31,6 +31,14 @@ ghc-options:
 - -Wmissing-home-modules
 - -Wpartial-fields
 - -Wredundant-constraints
+- -Wno-missing-signatures
+- -Wno-name-shadowing
+- -Wno-unused-matches
+- -Wno-incomplete-uni-patterns
+- -Wno-unused-top-binds
+- -Wno-unused-matches
+- -Wno-unused-imports
+- -Wno-incomplete-patterns
 
 library:
   source-dirs: src
