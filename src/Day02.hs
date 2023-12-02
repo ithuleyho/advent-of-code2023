@@ -37,6 +37,18 @@ parse line = if parseSets 0 sets then gameNumber line else 0
 
 part1 input = sum . map parse $ lines input
 
-part2 input = 0
 
-solve = part1
+
+
+
+
+split :: (Foldable f, Eq a) => a -> f a -> [[a]]
+split sep str = foldr op [[]] str
+    where op x ~(y:ys)
+              | x == sep = []:y:ys
+              | otherwise = (x:y):ys
+
+part2 :: String -> [String]
+part2 input = split ';' input
+
+solve = part2
