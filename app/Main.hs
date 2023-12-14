@@ -3,10 +3,10 @@ module Main (main) where
 import System.IO  
 import Data.Char
 
-import Day02 (solve)
+import Day04 (solve)
 
 filename :: String
-filename = "day02-part1"
+filename = "day04-part1"
 -- filename = "test"
 
 trim :: String -> String
